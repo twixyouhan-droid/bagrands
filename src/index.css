@@ -1,0 +1,864 @@
+/* ==========================================================================
+   TWIX — global styles
+   Tailwind v4 + hand-written design tokens. Edit the palette in
+   src/config/profile.ts (themes) rather than here.
+   ========================================================================== */
+
+@import "tailwindcss";
+@import "@fontsource-variable/space-grotesk";
+@import "@fontsource-variable/inter";
+
+@theme {
+  --font-display: "Space Grotesk Variable", "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", "Cascadia Mono", monospace;
+
+  --color-ink: #050505;
+  --color-ink-soft: #0a0b0d;
+  --color-primary: #ffffff;
+  --color-secondary: #9a9a9a;
+  --color-muted: #6a6a6a;
+  --color-glass: rgba(255, 255, 255, 0.06);
+  --color-hairline: rgba(255, 255, 255, 0.12);
+}
+
+/* ------------------------------------------------------------------ tokens */
+:root {
+  --accent: #ffffff;
+  --accent-soft: rgba(255, 255, 255, 0.55);
+  --glow: rgba(255, 255, 255, 0.3);
+
+  --glass: rgba(255, 255, 255, 0.055);
+  --glass-strong: rgba(255, 255, 255, 0.09);
+  --hairline: rgba(255, 255, 255, 0.12);
+  --hairline-soft: rgba(255, 255, 255, 0.07);
+
+  --shadow-card: 0 40px 120px -40px rgba(0, 0, 0, 0.95), 0 2px 0 0 rgba(255, 255, 255, 0.04) inset;
+  --radius-card: 28px;
+
+  /*
+    One label tier for the whole page. Sentence case, no tracking, and a
+    contrast ratio that actually passes (≈6.9:1 on the #050505 ground) — the
+    old /30–/40 grays measured 2.9–3.7:1 and failed WCAG AA for small text.
+  */
+  --label: rgba(255, 255, 255, 0.58);
+  --label-strong: rgba(255, 255, 255, 0.74);
+
+  /* pointer position, updated by JS (used by spotlight + parallax) */
+  --mx: 50%;
+  --my: 40%;
+  --px: 0px;
+  --py: 0px;
+
+  color-scheme: dark;
+}
+
+/* ------------------------------------------------------------------- base */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  background: #050505;
+  scroll-behavior: smooth;
+}
+
+/*
+  Zoom stays enabled — only the 300ms double-tap delay goes away, which
+  otherwise makes every button on the page feel laggy on a phone.
+*/
+button,
+a,
+[role="button"],
+input,
+select,
+label {
+  touch-action: manipulation;
+}
+
+/* Headings shouldn't strand a single word on the last line. */
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+/* Anchor jumps land below the fixed corner controls instead of underneath. */
+section[id],
+footer {
+  scroll-margin-top: 5rem;
+}
+
+body {
+  margin: 0;
+  background: #050505;
+  color: var(--color-primary);
+  font-family: var(--font-sans);
+  font-synthesis-weight: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 30%, transparent);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 1px solid color-mix(in srgb, var(--accent) 80%, transparent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 99px;
+  border: 3px solid #050505;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* When the custom cursor is active, hide the native one on desktop only. */
+@media (hover: hover) and (pointer: fine) {
+  body[data-cursor="on"],
+  body[data-cursor="on"] * {
+    cursor: none !important;
+  }
+}
+
+/* Native cursor is restored automatically while the intro/loader is up. */
+body[data-cursor="off"] {
+  cursor: auto;
+}
+
+/* ============================================================ components */
+@layer components {
+  /*
+    Two layers: the white sheen on top, a faint dark wash underneath so the
+    card keeps its contrast where the bright planet sits behind it.
+  */
+  .glass {
+    background:
+      linear-gradient(
+        160deg,
+        rgba(255, 255, 255, 0.06) 0%,
+        rgba(255, 255, 255, 0.01) 45%,
+        rgba(255, 255, 255, 0.035) 100%
+      ),
+      rgba(6, 7, 10, 0.06);
+    /* Barely frosted: the footage stays readable through the card. */
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    /* Type needs a little lift now that the ground behind it moves. */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55), 0 0 14px rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--hairline);
+    box-shadow: var(--shadow-card);
+  }
+
+  .glass-soft {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: 1px solid var(--hairline-soft);
+  }
+
+  /* 1px gradient hairline that fades at the edges */
+  .hairline-top {
+    position: relative;
+  }
+  .hairline-top::before {
+    content: "";
+    position: absolute;
+    inset-inline: 12%;
+    top: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  /* Values, not labels: plain sentence case at a readable weight. */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.3rem 0.7rem;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.74);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--hairline-soft);
+    border-radius: 999px;
+    transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1), background 320ms ease, border-color 320ms ease,
+      color 320ms ease;
+  }
+  .chip:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.92);
+    transform: translateY(-1px);
+  }
+
+  /* Display name: tight tracking on the big weight so the letters lock together. */
+  .display-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    line-height: 0.92;
+    text-transform: uppercase;
+  }
+  /* @handle under the name — mono, quiet, no competition with the display. */
+  .handle {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--label);
+  }
+
+  /* The page's single label voice — used by the dossier and footer. */
+  .label {
+    font-size: 11.5px;
+    line-height: 1.25;
+    color: var(--label);
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 999px;
+    border: 1px solid var(--hairline);
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.85);
+    transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), background 220ms ease, border-color 220ms ease,
+      box-shadow 220ms ease, color 220ms ease;
+  }
+  .btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.28);
+    box-shadow: 0 0 30px -6px var(--glow);
+    color: #fff;
+  }
+  .btn-ghost:active {
+    transform: scale(0.96);
+  }
+
+  /* Icon button with a soft brand glow on hover */
+  .social-btn {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 16px;
+    border: 1px solid var(--hairline-soft);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025));
+    color: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1), color 260ms ease, border-color 260ms ease,
+      background 260ms ease, box-shadow 300ms ease;
+    will-change: transform;
+  }
+  .social-btn::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: radial-gradient(120% 120% at 50% 120%, var(--brand, var(--accent)), transparent 65%);
+    opacity: 0;
+    transition: opacity 320ms ease;
+    pointer-events: none;
+    mix-blend-mode: screen;
+  }
+  .social-btn:hover,
+  .social-btn:focus-visible {
+    color: #fff;
+    border-color: color-mix(in srgb, var(--brand, var(--accent)) 55%, rgba(255, 255, 255, 0.2));
+    box-shadow: 0 10px 34px -12px var(--brand, var(--glow)), 0 0 0 1px color-mix(in srgb, var(--brand, var(--accent)) 22%, transparent) inset;
+  }
+  .social-btn:hover::after,
+  .social-btn:focus-visible::after {
+    opacity: 0.55;
+  }
+
+  /*
+    Single-row social set: each button takes an equal share of the row and
+    shrinks (never below 34px) instead of wrapping. Above ~400px of card width
+    they hit their natural 46px and the row simply centres.
+  */
+  .social-fit > * {
+    flex: 1 1 0;
+    min-width: 34px;
+    max-width: 46px;
+  }
+  .social-fit .social-btn {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+  }
+  @media (max-width: 400px) {
+    .social-fit {
+      gap: 5px;
+    }
+  }
+
+  .card-3d {
+    transform-style: preserve-3d;
+    will-change: transform;
+    transition: transform 620ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* ------------------------------------------------------------ 3D tilt
+   * Driven by useTilt3D (src/lib/tilt.ts), which writes --rx/--ry/--gx/--gy
+   * and --hover on the element. Everything here is compositor-only:
+   * transform + opacity, plus a shadow that only changes on hover.
+   */
+  .tilt-3d {
+    --rx: 0deg;
+    --ry: 0deg;
+    --gx: 50%;
+    --gy: 50%;
+    --hover: 0;
+    transform-style: preserve-3d;
+    transform: perspective(1200px) rotateX(var(--rx)) rotateY(var(--ry))
+      translate3d(0, calc(var(--hover) * -6px), calc(var(--hover) * 24px));
+    will-change: transform;
+    /* Shadow deepens and shifts opposite the tilt so the card reads as lifted. */
+    box-shadow:
+      var(--shadow-card),
+      0 calc(30px + var(--hover) * 30px) calc(60px + var(--hover) * 40px) -30px rgba(0, 0, 0, calc(0.55 + var(--hover) * 0.3)),
+      0 0 calc(var(--hover) * 90px) -20px var(--glow);
+  }
+  /* Moving glare: a soft light that follows the pointer across the glass. */
+  .tilt-glare {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(
+      circle at var(--gx) var(--gy),
+      rgba(255, 255, 255, 0.28) 0%,
+      rgba(255, 255, 255, 0.08) 22%,
+      transparent 58%
+    );
+    mix-blend-mode: screen;
+    opacity: var(--hover);
+    transition: opacity 320ms ease;
+  }
+  /* Streak highlight that sweeps with the rotation. */
+  .tilt-glare::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(
+      calc(115deg + var(--ry) * 2),
+      transparent 30%,
+      rgba(255, 255, 255, 0.14) 48%,
+      transparent 62%
+    );
+    opacity: calc(var(--hover) * 0.9);
+  }
+  /*
+    A thin light that travels around the card's edge. The ring is a mask; the
+    light is an oversized rotating conic gradient inside it, so the only
+    per-frame work is a compositor transform.
+  */
+  .card-sheen {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    pointer-events: none;
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    opacity: calc(0.55 + var(--hover, 0) * 0.45);
+    transition: opacity 400ms ease;
+  }
+  .card-sheen::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 220%;
+    aspect-ratio: 1;
+    translate: -50% -50%;
+    background: conic-gradient(
+      from 0deg,
+      transparent 0 34%,
+      rgba(255, 255, 255, 0.75) 42%,
+      transparent 50% 100%
+    );
+    animation: sheen-spin 14s linear infinite;
+    will-change: transform;
+  }
+
+  /* Children lifted off the glass so the tilt has visible depth. */
+  .tilt-layer {
+    transform: translateZ(var(--z, 24px));
+    transform-style: preserve-3d;
+  }
+
+  /* Small controls: icon buttons and player buttons pop out on hover. */
+  /*
+    No defaults declared here on purpose: the vars are written on the element
+    OR an ancestor (the social wrapper), and redeclaring them would shadow the
+    inherited values. Fallbacks in var() cover the rest state instead.
+  */
+  .btn-3d {
+    position: relative;
+    transform-style: preserve-3d;
+    transform: perspective(500px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg))
+      translate3d(0, calc(var(--hover, 0) * -3px), calc(var(--hover, 0) * 18px))
+      scale(calc(1 + var(--hover, 0) * 0.06));
+    will-change: transform;
+  }
+  .btn-3d > * {
+    transform: translateZ(12px);
+  }
+  .btn-3d::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(
+      circle at var(--gx, 50%) var(--gy, 50%),
+      rgba(255, 255, 255, 0.55) 0%,
+      rgba(255, 255, 255, 0.12) 30%,
+      transparent 62%
+    );
+    mix-blend-mode: screen;
+    opacity: calc(var(--hover, 0) * 0.75);
+    transition: opacity 240ms ease;
+    z-index: 1;
+  }
+  .btn-3d.social-btn {
+    /* Existing brand glow, plus a drop shadow that grows with the lift. */
+    box-shadow:
+      0 calc(6px + var(--hover, 0) * 14px) calc(16px + var(--hover, 0) * 22px) calc(-8px - var(--hover, 0) * 2px) rgba(0, 0, 0, calc(0.5 + var(--hover, 0) * 0.3)),
+      0 calc(var(--hover, 0) * 10px) calc(var(--hover, 0) * 34px) -12px var(--brand, var(--glow));
+  }
+  .btn-3d.player-btn {
+    box-shadow:
+      0 calc(4px + var(--hover, 0) * 10px) calc(12px + var(--hover, 0) * 18px) -8px rgba(0, 0, 0, calc(0.4 + var(--hover, 0) * 0.35)),
+      0 0 calc(var(--hover, 0) * 22px) -6px var(--glow);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tilt-3d,
+    .btn-3d {
+      transform: none;
+    }
+    .anim-enter-card,
+    .anim-blur-in,
+    .card-sheen::before,
+    .anim-rise .stagger > *,
+    .hero-scroll {
+      animation: none;
+    }
+    .tilt-glare,
+    .btn-3d::before {
+      display: none;
+    }
+  }
+}
+
+/* ============================================================= utilities */
+@layer utilities {
+  /*
+    Staggered entrance. Children of a `.stagger` block pop in one after
+    another once their `.anim-rise` ancestor starts — each child sets --i.
+  */
+  .anim-rise .stagger > * {
+    animation: pop 640ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(120ms + var(--i, 0) * 55ms);
+  }
+
+  /*
+    Scroll-linked: as the hero leaves the top of the viewport it recedes and
+    fades, so the About section arrives over it rather than after it. Runs on
+    the compositor via a scroll timeline; browsers without it just scroll.
+  */
+  @supports (animation-timeline: view()) {
+    .hero-scroll {
+      animation: hero-away linear both;
+      animation-timeline: view();
+      animation-range: exit 0% exit 70%;
+    }
+  }
+
+  /* Starfield canvas fades in on its first frame instead of popping. */
+  .starfield {
+    opacity: 0;
+    transition: opacity 1600ms ease-out;
+  }
+  .starfield.is-ready {
+    opacity: var(--star-opacity, 0.9);
+  }
+
+  /*
+    Below-the-fold sections skip layout and paint until they are near the
+    viewport. The intrinsic size keeps the scrollbar honest before they render.
+  */
+  .below-fold {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 640px;
+  }
+
+  /* Card entrance: settles from slightly below, slightly small, slightly blurred. */
+  .anim-enter-card {
+    animation: enter-card 1100ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .anim-blur-in {
+    animation: blur-in 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .text-glow {
+    text-shadow: 0 0 18px rgba(255, 255, 255, 0.35), 0 0 62px rgba(255, 255, 255, 0.18);
+  }
+  .text-accent-glow {
+    text-shadow: 0 0 20px var(--glow), 0 0 70px color-mix(in srgb, var(--glow) 60%, transparent);
+  }
+  .chromatic {
+    text-shadow: -0.7px 0 0 rgba(255, 60, 90, 0.35), 0.7px 0 0 rgba(60, 190, 255, 0.3);
+  }
+  .mask-fade-b {
+    mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
+  }
+  .mask-radial {
+    mask-image: radial-gradient(70% 70% at 50% 45%, #000 30%, transparent 78%);
+    -webkit-mask-image: radial-gradient(70% 70% at 50% 45%, #000 30%, transparent 78%);
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+  .writing-vertical {
+    writing-mode: vertical-rl;
+  }
+}
+
+/*
+  Skip link: off-screen until a keyboard visitor focuses it, then it slides in.
+  Sits above every overlay so it stays reachable even behind the intro gate.
+*/
+.skip-link {
+  position: fixed;
+  top: calc(0.75rem + env(safe-area-inset-top, 0px));
+  left: 50%;
+  z-index: 120;
+  padding: 0.55rem 1rem;
+  font-size: 12.5px;
+  color: #fff;
+  background: #101114;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  transform: translate(-50%, -180%);
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.skip-link:focus-visible {
+  transform: translate(-50%, 0);
+}
+
+/*
+  Fixed corner controls must clear the notch / home indicator. Unlayered so they
+  win over Tailwind's utilities without needing !important.
+*/
+.safe-tl {
+  top: calc(0.75rem + env(safe-area-inset-top, 0px));
+  left: calc(0.75rem + env(safe-area-inset-left, 0px));
+}
+.safe-tr {
+  top: calc(0.75rem + env(safe-area-inset-top, 0px));
+  right: calc(0.75rem + env(safe-area-inset-right, 0px));
+}
+.safe-b {
+  bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+}
+@media (min-width: 48rem) {
+  .safe-tl {
+    top: calc(1.25rem + env(safe-area-inset-top, 0px));
+    left: calc(1.25rem + env(safe-area-inset-left, 0px));
+  }
+  .safe-tr {
+    top: calc(1.25rem + env(safe-area-inset-top, 0px));
+    right: calc(1.25rem + env(safe-area-inset-right, 0px));
+  }
+}
+
+/* ================================================================== fx */
+.fx-vignette {
+  background:
+    radial-gradient(120% 90% at 50% 8%, transparent 35%, rgba(0, 0, 0, 0.55) 78%, rgba(0, 0, 0, 0.9) 100%),
+    radial-gradient(80% 60% at 50% 110%, rgba(0, 0, 0, 0.75), transparent 70%);
+}
+
+.fx-grain::before {
+  content: "";
+  position: absolute;
+  inset: -150%;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='160' height='160' filter='url(%23n)' opacity='0.5'/></svg>");
+  opacity: 0.04;
+  animation: grain 700ms steps(2, end) infinite;
+  pointer-events: none;
+}
+
+.fx-scanlines {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.019) 0px,
+    rgba(255, 255, 255, 0.019) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+/* Sheen on the glass card, in the card's own coordinate space. */
+.fx-spotlight {
+  background: radial-gradient(
+    360px circle at var(--mx) var(--my),
+    color-mix(in srgb, var(--accent) 9%, transparent),
+    transparent 62%
+  );
+}
+
+/*
+  The same pointer, doing a different job in the room: a wide wash so the
+  background brightens where you look. The coordinates come from the backdrop's
+  own loop, which keeps the centre a margin in from the frame — see Backdrop.tsx.
+*/
+.fx-room-light {
+  background: radial-gradient(
+    640px circle at var(--mx) var(--my),
+    color-mix(in srgb, var(--accent) 7%, transparent),
+    transparent 72%
+  );
+}
+
+.fx-fog {
+  background: radial-gradient(38% 30% at 18% 70%, rgba(255, 255, 255, 0.05), transparent 70%),
+    radial-gradient(30% 26% at 82% 40%, rgba(255, 255, 255, 0.045), transparent 72%),
+    radial-gradient(46% 34% at 55% 96%, rgba(255, 255, 255, 0.05), transparent 74%);
+  animation: fog-pan 42s ease-in-out infinite alternate;
+}
+
+/*
+  Bands converge above the frame, not at 50% / -10%. Converging on the visible
+  top edge stacked every band into one bright spot right above the card.
+*/
+.fx-rays {
+  background: conic-gradient(
+    from 200deg at 50% -34%,
+    transparent 0deg,
+    rgba(255, 255, 255, 0.05) 12deg,
+    transparent 24deg,
+    transparent 60deg,
+    rgba(255, 255, 255, 0.035) 74deg,
+    transparent 96deg
+  );
+  mix-blend-mode: screen;
+  animation: rays 26s ease-in-out infinite alternate;
+}
+
+/* ============================================================== motion */
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-2%, 1%); }
+  50% { transform: translate(1%, -2%); }
+  75% { transform: translate(-1%, 2%); }
+  100% { transform: translate(2%, -1%); }
+}
+@keyframes fog-pan {
+  from { transform: translate3d(-2%, 0, 0) scale(1.05); }
+  to { transform: translate3d(2%, -1.5%, 0) scale(1.12); }
+}
+@keyframes rays {
+  from { opacity: 0.4; transform: rotate(-2deg); }
+  to { opacity: 0.75; transform: rotate(3deg); }
+}
+@keyframes float-slow {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -10px, 0); }
+}
+@keyframes float-slower {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -6px, 0); }
+}
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+@keyframes caret {
+  0%, 45% { opacity: 1; }
+  55%, 100% { opacity: 0; }
+}
+/* Never hide primary copy behind a blink — pulse the glow instead. */
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.9; text-shadow: 0 0 16px rgba(255, 255, 255, 0.22); }
+  50% { opacity: 1; text-shadow: 0 0 34px rgba(255, 255, 255, 0.5); }
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.16; }
+  50% { opacity: 0.72; }
+}
+@keyframes shimmer {
+  0% { background-position: -140% 0; }
+  100% { background-position: 240% 0; }
+}
+@keyframes snow {
+  0% { transform: translate3d(0, -8vh, 0); opacity: 0; }
+  10% { opacity: var(--flake-opacity, 0.6); }
+  90% { opacity: var(--flake-opacity, 0.6); }
+  100% { transform: translate3d(var(--drift, 20px), 108vh, 0); opacity: 0; }
+}
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0) scale(0.72);
+  }
+  60% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+@keyframes hero-away {
+  to {
+    opacity: 0.15;
+    transform: translate3d(0, -32px, 0) scale(0.94);
+  }
+}
+@keyframes sheen-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes enter-card {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 28px, 0) scale(0.965);
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+}
+@keyframes blur-in {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+@keyframes rise {
+  from { opacity: 0; transform: translate3d(0, 14px, 0); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes burst {
+  0% { transform: scale(0.6); opacity: 0.8; }
+  100% { transform: scale(2.1); opacity: 0; }
+}
+@keyframes eq {
+  0%, 100% { transform: scaleY(0.28); }
+  50% { transform: scaleY(1); }
+}
+@keyframes glitch-sweep {
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(220%); }
+}
+
+.anim-float { animation: float-slow 7s ease-in-out infinite; }
+.anim-float-slow { animation: float-slower 11s ease-in-out infinite; }
+.anim-spin-slow { animation: spin-slow 26s linear infinite; }
+.anim-caret { animation: caret 1.05s step-end infinite; }
+.anim-glow-pulse { animation: glow-pulse 4.4s ease-in-out infinite; }
+.anim-rise { animation: rise 800ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+.shimmer-text {
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0.72) 20%,
+    #fff 42%,
+    rgba(255, 255, 255, 0.72) 62%
+  );
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 5.5s ease-in-out infinite;
+}
+
+.eq-bar {
+  transform-origin: bottom center;
+  animation: eq 900ms ease-in-out infinite;
+}
+
+/*
+  Scroll reveal (JS toggles .is-in).
+  Opacity only — a fade-and-slide-up on every section is the single most
+  recognisable generated-page motion. The one orchestrated entrance on this
+  page is the profile card; supporting content just resolves into place.
+*/
+.reveal {
+  opacity: 0;
+  transition: opacity 780ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity;
+}
+.reveal.is-in {
+  opacity: 1;
+  /* Free the compositor layer once the reveal is done. */
+  will-change: auto;
+}
+
+/*
+  Skip rendering below-fold sections until they are about to enter the viewport.
+  This shaves ~200ms from initial layout on lower-end devices.
+*/
+#about,
+#projects,
+#stats {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 600px;
+}
+
+/* ====================================================== reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .reveal {
+    opacity: 1;
+  }
+  .fx-grain::before {
+    display: none;
+  }
+}
