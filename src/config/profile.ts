@@ -503,7 +503,7 @@ export const sections = {
 export const seo = {
   title: "Twix — Life is Pay To Win",
   description: "Twix — personal profile, socials, projects and more.",
-  url: "https://twix.example",
+  url: "https://twixweb.github.io/bagrands/",
   themeColor: "#050505",
   keywords: ["twix", "profile", "link in bio", "socials", "portfolio"],
   twitterHandle: "@twix",
