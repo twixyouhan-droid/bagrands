@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Twix">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#17191d" />
+      <stop offset="1" stop-color="#050505" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#g)" stroke="rgba(255,255,255,0.16)" />
+  <circle cx="32" cy="32" r="23" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="1" />
+  <path d="M20 23h24M32 23v20" stroke="#ffffff" stroke-width="3.4" stroke-linecap="round" />
+  <circle cx="32" cy="9" r="1.6" fill="#ffffff" opacity="0.8" />
+</svg>

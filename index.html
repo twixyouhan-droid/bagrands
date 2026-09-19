@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#050505" />
+    <meta name="color-scheme" content="dark" />
+
+    <title>Twix — Life is Pay To Win</title>
+    <meta name="description" content="Twix — personal profile, socials, projects and more." />
+    <meta
+      name="keywords"
+      content="twix, profile, link in bio, socials, portfolio, discord, spotify, tiktok, instagram"
+    />
+    <meta name="author" content="Twix" />
+    <link rel="canonical" href="https://twixyouhan-droid.github.io/bagrands/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="profile" />
+    <meta property="og:site_name" content="Twix" />
+    <meta property="og:title" content="Twix — Life is Pay To Win" />
+    <meta property="og:description" content="Twix — personal profile, socials, projects and more." />
+    <meta property="og:url" content="https://twixyouhan-droid.github.io/bagrands/" />
+    <!--
+      Social scrapers ignore relative image URLs, so this one is absolute.
+      Update this URL if you move to your own domain — here AND in src/config/profile.ts (seo.url).
+    -->
+    <meta property="og:image" content="https://twixyouhan-droid.github.io/bagrands/media/avatar.jpg" />
+    <meta property="og:image:alt" content="Twix avatar" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Twix — Life is Pay To Win" />
+    <meta name="twitter:description" content="Twix — personal profile, socials, projects and more." />
+    <meta name="twitter:image" content="https://twixyouhan-droid.github.io/bagrands/media/avatar.jpg" />
+    <meta name="twitter:image:alt" content="Twix avatar" />
+    <meta name="twitter:creator" content="@twix" />
+
+    <!-- Icons -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="apple-touch-icon" href="favicon.svg" />
+    <link rel="manifest" href="site.webmanifest" />
+
+    <!-- Resource hints: warm up connections to external services early. -->
+    <!-- Discord CDN (avatars) -->
+    <link rel="preconnect" href="https://cdn.discordapp.com" crossorigin />
+    <link rel="dns-prefetch" href="https://cdn.discordapp.com" />
+    <!-- Lanyard API (Discord presence) -->
+    <link rel="preconnect" href="https://api.lanyard.rest" />
+    <link rel="dns-prefetch" href="https://api.lanyard.rest" />
+    <!-- Spotify (album art) -->
+    <link rel="dns-prefetch" href="https://i.scdn.co" />
+
+    <!-- Preload the heaviest above-the-fold art -->
+    <link rel="preload" as="image" href="media/avatar.jpg" />
+
+    <!-- Structured data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Twix",
+        "alternateName": "Twix",
+        "description": "Twix — personal profile, socials, projects and more.",
+        "url": "https://twixyouhan-droid.github.io/bagrands/",
+        "image": "https://twixyouhan-droid.github.io/bagrands/media/avatar.jpg",
+        "sameAs": []
+      }
+    </script>
+
+    <!--
+      Paint the shell black before React loads so the cinematic intro never
+      flashes white. Keep these styles in sync with src/index.css.
+    -->
+    <style>html,body{color:#f2f2f2;overscroll-behavior:none;background:#050505;margin:0}#boot{z-index:100;background:#050505;place-items:center;display:grid;position:fixed;top:0;bottom:0;left:0;right:0}#boot span{border:1px solid #ffffff2e;border-top-color:#ffffffe6;border-radius:999px;width:46px;height:46px;animation:.9s linear infinite bootspin}@keyframes bootspin{to{transform:rotate(360deg)}}@media (prefers-reduced-motion:reduce){#boot span{animation:none}}</style>
+    <script type="module" crossorigin src="./assets/index-BVO6iVjv.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CXHxssQy.js">
+    <link rel="modulepreload" crossorigin href="./assets/motion-CNjOh0KY.js">
+    <link rel="modulepreload" crossorigin href="./assets/icons-B-6nzv0l.js">
+    <link rel="stylesheet" crossorigin href="./assets/index-CC4q0SV7.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <div id="boot" aria-hidden="true"><span></span></div>
+    <noscript>
+      <div style="padding: 2rem; font-family: sans-serif; text-align: center">
+        Twix — Life is Pay To Win. This experience needs JavaScript enabled.
+      </div>
+    </noscript>
+  </body>
+</html>
